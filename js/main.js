@@ -61,9 +61,9 @@ const TYPES = ['palace', 'flat', 'house', 'bungalow ', 'hotel',];
 const TIMES = ['12:00', '13:00', '14:00',];
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner',];
 const PHOTO_LINKS = [
-'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
-'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
-'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',];
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',];
 
 const advent = {
   author: {
@@ -107,7 +107,7 @@ const createNumberForAddressAvatar = function () {
     return '0' + String(result);
   }
 
-  return 10
+  return 10;
 };
 
 const createNewArrayForAdvent = function (startArray) {
@@ -128,7 +128,7 @@ const createNewArrayForAdvent = function (startArray) {
     cloneStartArray.splice(indexForNewElementNewArray, 1);
     indexLastElement =  indexLastElement - 1;
   }
-    return newArray;
+  return newArray;
 };
 
 const createAdvent = function () {
@@ -156,7 +156,7 @@ const createAdvent = function () {
       lat: LAT,
       lng: LNG,
     },
-  }
+  };
 };
 
 const LENGTH_FOR_ADVENTS_LIST = 10;
