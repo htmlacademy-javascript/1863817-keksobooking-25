@@ -1,6 +1,6 @@
 const getRandomInteger = function (min, max) {
 
-  if ((min || max) < 0 || max <= min || (min || max) % 1 !== 0)  {
+  if ((min || max) < 0 || max < min || (min || max) % 1 !== 0)  {
     return 'При выборе диапозона допущена ошибка.';
   }
 
@@ -11,7 +11,7 @@ getRandomInteger(1, 50);
 
 const getRandomFloat = function (min, max, numberAfterDot) {
 
-  if ((min || max) < 0 || max <= min || (min || max) % 1 === 0)  {
+  if ((min || max) < 0 || max < min || (min || max) % 1 === 0)  {
     return 'При выборе диапозона допущена ошибка.';
   }
 
@@ -89,17 +89,6 @@ const advent = {
 };
 
 //////////////////////////////////
-const createStringForTitlesAndDescription = function (list) {
-  let randomIndexElement = getRandomInteger(0, list.length - 1);
-
-  if (list.length === 1) {
-    randomIndexElement = 0;
-  }
-
-  const newStringFromList = list[randomIndexElement];
-  list.splice(randomIndexElement, 1);
-  return newStringFromList;
-};
 
 const createNumberForAddressAvatar = function () {
   const result = getRandomInteger(1, 10);
@@ -110,24 +99,25 @@ const createNumberForAddressAvatar = function () {
   return 10;
 };
 
-const createNewArrayForAdvent = function (startArray) {
+const extractRandomEntityFromArr = function (list) {
+  let randomIndexElement = getRandomInteger(0, list.length - 1);
+
+  const newStringFromList = list[randomIndexElement];
+  list.splice(randomIndexElement, 1);
+  return newStringFromList;
+};
+
+const createRandomEntitiesArray  = function (startArray) {
   const forMakeLengthNewArray = startArray.length;
   const newArrayLength = getRandomInteger(1, forMakeLengthNewArray);
-  let indexLastElement = startArray.length - 1;
-  const cloneStartArray = startArray.slice(0);
+  let cloneStartArray = startArray.slice(0);
   const newArray = [];
 
   for (let i = 0; i < newArrayLength; i++) {
-    let indexForNewElementNewArray = getRandomInteger(0, indexLastElement);
-
-    if (indexLastElement === 0) {
-      indexForNewElementNewArray = 0;
-    }
-
-    newArray.push(cloneStartArray[indexForNewElementNewArray]);
-    cloneStartArray.splice(indexForNewElementNewArray, 1);
-    indexLastElement =  indexLastElement - 1;
+    newArray.push(extractRandomEntityFromArr(cloneStartArray));
   }
+
+  cloneStartArray = startArray.slice(0);
   return newArray;
 };
 
@@ -140,7 +130,7 @@ const createAdvent = function () {
       avatar: 'img/avatars/user' + createNumberForAddressAvatar() + '.png',
     },
     offer: {
-      title: createStringForTitlesAndDescription(TITLES),
+      title: extractRandomEntityFromArr(TITLES),
       address: LAT + ', ' + LNG,
       price: getRandomInteger(15000, 100000),
       type: TYPES[getRandomInteger(0, 4)],
@@ -148,9 +138,9 @@ const createAdvent = function () {
       guests: getRandomInteger(1, 10),
       checkin: TIMES[getRandomInteger(0, 2)],
       checkout: TIMES[getRandomInteger(0, 2)],
-      features: createNewArrayForAdvent(FEATURES),
-      description: createStringForTitlesAndDescription(DESCRIPTIONS),
-      photos: createNewArrayForAdvent(PHOTO_LINKS),
+      features: createRandomEntitiesArray (FEATURES),
+      description: extractRandomEntityFromArr(DESCRIPTIONS),
+      photos: createRandomEntitiesArray (PHOTO_LINKS),
     },
     location: {
       lat: LAT,
@@ -161,3 +151,5 @@ const createAdvent = function () {
 
 const LENGTH_FOR_ADVENTS_LIST = 10;
 const AdventsList = Array.from({length: LENGTH_FOR_ADVENTS_LIST}, createAdvent);
+
+console.log(AdventsList);
