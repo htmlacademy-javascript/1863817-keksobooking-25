@@ -54,8 +54,6 @@ const DESCRIPTIONS = [
 // поэтому придумал 2 массива с 10 разными значениями и создал функцию для получения неповторяющнегося результата.
 // Реализовал это за счет удаления из первоначального массива элемента который добавляется,
 // исходя из того что первоначальные массивы могут мне понадобиться снова в своем первозданном виде клонирую их
-const TITLES_CLONE = TITLES.slice(0);
-const DESCRIPTIONS_CLONE = DESCRIPTIONS.slice(0);
 
 const TYPES = ['palace', 'flat', 'house', 'bungalow ', 'hotel',];
 const TIMES = ['12:00', '13:00', '14:00',];
@@ -65,42 +63,42 @@ const PHOTO_LINKS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',];
 
-const advent = {
-  author: {
-    avatar: 'img/avatars/user10.png',
-  },
-  offer: {
-    title: 'Дворец Путина',
-    address: '35.65000, 139.80000',
-    price: 50000,
-    type: 'palace',
-    rooms: 2,
-    guests: 2,
-    checkin: '12:00',
-    checkout: '12:00',
-    features: ['wifi', 'parking', 'conditioner'],
-    description: 'Великолепное, удобное и приятное жилье для комфортной жизни и времяпрепровождения',
-    photos: ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg'],
-  },
-  location: {
-    lat: 35.65000,
-    lng: 139.80000,
-  },
-};
+// const advent = {
+//   author: {
+//     avatar: 'img/avatars/user10.png',
+//   },
+//   offer: {
+//     title: 'Дворец Путина',
+//     address: '35.65000, 139.80000',
+//     price: 50000,
+//     type: 'palace',
+//     rooms: 2,
+//     guests: 2,
+//     checkin: '12:00',
+//     checkout: '12:00',
+//     features: ['wifi', 'parking', 'conditioner'],
+//     description: 'Великолепное, удобное и приятное жилье для комфортной жизни и времяпрепровождения',
+//     photos: ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg'],
+//   },
+//   location: {
+//     lat: 35.65000,
+//     lng: 139.80000,
+//   },
+// };
 
 //////////////////////////////////
 
 const createNumberForAddressAvatar = function () {
   const result = getRandomInteger(1, 10);
   if (result < 10) {
-    return '0' + String(result);
+    return `0${String(result)}`;
   }
 
   return 10;
 };
 
 const extractRandomEntityFromArr = function (list) {
-  let randomIndexElement = getRandomInteger(0, list.length - 1);
+  const randomIndexElement = getRandomInteger(0, list.length - 1);
 
   const newStringFromList = list[randomIndexElement];
   list.splice(randomIndexElement, 1);
@@ -108,16 +106,15 @@ const extractRandomEntityFromArr = function (list) {
 };
 
 const createRandomEntitiesArray  = function (startArray) {
-  const forMakeLengthNewArray = startArray.length;
-  const newArrayLength = getRandomInteger(1, forMakeLengthNewArray);
-  let cloneStartArray = startArray.slice(0);
+  const newArrayLength = getRandomInteger(1, startArray.length);
+  const cloneStartArray = startArray.slice(0);
   const newArray = [];
 
   for (let i = 0; i < newArrayLength; i++) {
     newArray.push(extractRandomEntityFromArr(cloneStartArray));
   }
 
-  cloneStartArray = startArray.slice(0);
+  // cloneStartArray = startArray.slice(0);
   return newArray;
 };
 
@@ -127,11 +124,11 @@ const createAdvent = function () {
 
   return {
     author: {
-      avatar: 'img/avatars/user' + createNumberForAddressAvatar() + '.png',
+      avatar: `img/avatars/user${createNumberForAddressAvatar()}.png`,
     },
     offer: {
       title: extractRandomEntityFromArr(TITLES),
-      address: LAT + ', ' + LNG,
+      address: `${LAT}, ${LNG}`,
       price: getRandomInteger(15000, 100000),
       type: TYPES[getRandomInteger(0, 4)],
       rooms: getRandomInteger(1, 10),
@@ -152,4 +149,3 @@ const createAdvent = function () {
 const LENGTH_FOR_ADVENTS_LIST = 10;
 const AdventsList = Array.from({length: LENGTH_FOR_ADVENTS_LIST}, createAdvent);
 
-console.log(AdventsList);
