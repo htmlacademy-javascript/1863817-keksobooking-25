@@ -1,5 +1,5 @@
-import getRandomInteger from './util.js';
-import getRandomFloat from './util.js';
+import {getRandomInteger, getRandomFloat} from './util.js';
+// import getRandomFloat from './util.js';
 
 const TITLES = [
   'Комфортная жилплощадь',
@@ -81,9 +81,9 @@ const createAdvent = function () {
       guests: getRandomInteger(1, 10),
       checkin: TIMES[getRandomInteger(0, 2)],
       checkout: TIMES[getRandomInteger(0, 2)],
-      features: createRandomEntitiesArray (FEATURES),
+      features: createRandomEntitiesArray(FEATURES),
       description: extractRandomEntityFromArr(DESCRIPTIONS),
-      photos: createRandomEntitiesArray (PHOTO_LINKS),
+      photos: createRandomEntitiesArray(PHOTO_LINKS),
     },
     location: {
       lat: LAT,
@@ -94,3 +94,5 @@ const createAdvent = function () {
 
 const LENGTH_FOR_ADVENTS_LIST = 10;
 const AdventsList = Array.from({length: LENGTH_FOR_ADVENTS_LIST}, createAdvent);
+
+export {AdventsList};
