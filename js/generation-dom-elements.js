@@ -1,6 +1,7 @@
 import {AdventsList} from './data.js';
 
-// const cardTemplate = document.querySelector('.popup');
+// const cardTemplate = document.querySelector('.popup'); НЕ ПОНИМАЮ ПОЧЕМУ НЕ ПОЛУЧАЕТССЯ НАЙТИ И РАБОТАТЬ С ПОПАП ТАКИМ ОБРАЗОМ
+// И ПРИХОДИТСЯ ДЕЛАТЬ ТО ЧТО С 6 ПО 9 СТРОКУ
 const blockForCards = document.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card')
   .content
@@ -49,6 +50,7 @@ const createPhotoList = function(linkList) {
     createImage.src = linkList[i];
   }
 };
+// ФУНКЦИЯ НЕ ОТРАБАТЫВАЕТ НЕ МОГУ ПОНЯТЬ В ЧЕМ ОШИБКА
 
 similarCards.forEach((advent) => {
   const cardElement = cardTemplate.cloneNode(true);
@@ -62,7 +64,7 @@ similarCards.forEach((advent) => {
   cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${advent.offer.checkin}, выезд до ${advent.offer.checkout}`;
   cardElement.querySelector('.popup__features').textContent = features.join(', ');
   cardElement.querySelector('.popup__description').textContent = advent.offer.description;
-  createPhotoList(photosLinks);
+  createPhotoList(photosLinks); ///
   cardElement.querySelector('.popup__avatar').src = advent.author.avatar;
 
 

@@ -1,5 +1,4 @@
 import {getRandomInteger, getRandomFloat} from './util.js';
-// import getRandomFloat from './util.js';
 
 const TITLES = [
   'Комфортная жилплощадь',
