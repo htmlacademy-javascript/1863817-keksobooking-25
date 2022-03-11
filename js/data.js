@@ -92,6 +92,6 @@ const createAdvent = function () {
 };
 
 const LENGTH_FOR_ADVENTS_LIST = 10;
-const AdventsList = Array.from({length: LENGTH_FOR_ADVENTS_LIST}, createAdvent);
+const adventsList = Array.from({length: LENGTH_FOR_ADVENTS_LIST}, createAdvent);
 
-export {AdventsList};
+export {adventsList};
