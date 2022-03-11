@@ -1,5 +1,4 @@
-import getRandomInteger from './util.js';
-import getRandomFloat from './util.js';
+import {getRandomInteger, getRandomFloat} from './util.js';
 
 const TITLES = [
   'Комфортная жилплощадь',
@@ -76,14 +75,16 @@ const createAdvent = function () {
       title: extractRandomEntityFromArr(TITLES),
       address: `${LAT}, ${LNG}`,
       price: getRandomInteger(15000, 100000),
-      type: TYPES[getRandomInteger(0, 4)],
+      // type: TYPES[getRandomInteger(0, 4)],
+      type: '',
       rooms: getRandomInteger(1, 10),
       guests: getRandomInteger(1, 10),
       checkin: TIMES[getRandomInteger(0, 2)],
       checkout: TIMES[getRandomInteger(0, 2)],
-      features: createRandomEntitiesArray (FEATURES),
-      description: extractRandomEntityFromArr(DESCRIPTIONS),
-      photos: createRandomEntitiesArray (PHOTO_LINKS),
+      features: createRandomEntitiesArray(FEATURES),
+      // description: extractRandomEntityFromArr(DESCRIPTIONS),
+      description: undefined,
+      photos: createRandomEntitiesArray(PHOTO_LINKS),
     },
     location: {
       lat: LAT,
@@ -93,4 +94,6 @@ const createAdvent = function () {
 };
 
 const LENGTH_FOR_ADVENTS_LIST = 10;
-const AdventsList = Array.from({length: LENGTH_FOR_ADVENTS_LIST}, createAdvent);
+const adventsList = Array.from({length: LENGTH_FOR_ADVENTS_LIST}, createAdvent);
+
+export {adventsList};
