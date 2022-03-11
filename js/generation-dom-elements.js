@@ -32,6 +32,9 @@ const traslateTypes = function (englishWord) {
 const createPhotoList = function(linkList, templateClone) {
   const photoBlock = templateClone.querySelector('.popup__photos');
   const photo = photoBlock.querySelector('.popup__photo');
+  if (!linkList) {
+    photoBlock.classList.add('hidden');
+  }
 
   for (let i = 0; i <= linkList.length - 1; i++) {
     if(i === 0) {
@@ -50,19 +53,34 @@ const createPhotoList = function(linkList, templateClone) {
 
 adventsList.forEach((advent) => {
   const cardElement = cardTemplate.cloneNode(true);
-  const features = advent.offer.features;
-  const photosLinks = advent.offer.photos;
+  const title = cardElement.querySelector('.popup__title');
+  const address = cardElement.querySelector('.popup__text--address');
+  const price = cardElement.querySelector('.popup__text--price');
+  const type = cardElement.querySelector('.popup__type');
+  const capacity = cardElement.querySelector('.popup__text--capacity');
+  const time = cardElement.querySelector('.popup__text--time');
+  const features = cardElement.querySelector('.popup__features');
+  const description =  cardElement.querySelector('.popup__description');
+  const avatar = cardElement.querySelector('.popup__avatar');
+  const photos = advent.offer.photos;
+  const allElementsInTemplate= [title, address, price, type, capacity, time, features, description, avatar];
 
-  cardElement.querySelector('.popup__title').textContent = advent.offer.title;
-  cardElement.querySelector('.popup__text--address').textContent = advent.offer.address;
-  cardElement.querySelector('.popup__text--price').textContent = `${advent.offer.price} ₽/ночь`;
-  cardElement.querySelector('.popup__type').textContent = traslateTypes(advent.offer.type);
-  cardElement.querySelector('.popup__text--capacity').textContent = `${advent.offer.rooms} комнаты для ${advent.offer.guests} гостей`;
-  cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${advent.offer.checkin}, выезд до ${advent.offer.checkout}`;
-  cardElement.querySelector('.popup__features').textContent = features.join(', ');
-  cardElement.querySelector('.popup__description').textContent = advent.offer.description;
-  createPhotoList(photosLinks, cardElement);
-  cardElement.querySelector('.popup__avatar').src = advent.author.avatar;
+  for (const element of allElementsInTemplate) {
+    if (!advent.offer.element || !advent.author.element) {
+      element.classList.add('hidden');
+    }
+  }
+
+  title.textContent = advent.offer.title;
+  address.textContent = advent.offer.address;
+  price.textContent = `${advent.offer.price} ₽/ночь`;
+  type.textContent = traslateTypes(advent.offer.type);
+  capacity.textContent = `${advent.offer.rooms} комнаты для ${advent.offer.guests} гостей`;
+  time.textContent = `Заезд после ${advent.offer.checkin}, выезд до ${advent.offer.checkout}`;
+  features.textContent = advent.offer.features.join(', ');
+  description.textContent = advent.offer.description;
+  createPhotoList(photos, cardElement);
+  avatar.src = advent.author.avatar;
 
   blockForCards.appendChild(cardElement);
 });
