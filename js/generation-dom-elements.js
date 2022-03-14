@@ -65,12 +65,6 @@ adventsList.forEach((advent) => {
   const photos = advent.offer.photos;
   const allElementsInTemplate= [title, address, price, type, capacity, time, features, description, avatar];
 
-  for (const element of allElementsInTemplate) {
-    if (!advent.offer.element || !advent.author.element) {
-      element.classList.add('hidden');
-    }
-  }
-
   title.textContent = advent.offer.title;
   address.textContent = advent.offer.address;
   price.textContent = `${advent.offer.price} ₽/ночь`;
@@ -81,6 +75,16 @@ adventsList.forEach((advent) => {
   description.textContent = advent.offer.description;
   createPhotoList(photos, cardElement);
   avatar.src = advent.author.avatar;
+
+  for (const element of allElementsInTemplate) {
+    if (!element.textContent && !element.src) {
+      element.classList.add('hidden');
+    }
+  }
+
+  if (!advent.author.avatar) {
+    avatar.classList.add('hidden');
+  }
 
   blockForCards.appendChild(cardElement);
 });
