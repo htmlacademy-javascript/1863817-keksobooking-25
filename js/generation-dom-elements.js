@@ -63,7 +63,7 @@ adventsList.forEach((advent) => {
   const description =  cardElement.querySelector('.popup__description');
   const avatar = cardElement.querySelector('.popup__avatar');
   const photos = advent.offer.photos;
-  const allElementsInTemplate= [title, address, price, type, capacity, time, features, description, avatar];
+  const allKeysInObject= ['title', 'address', 'price', 'type', 'rooms', 'guests', 'checkin', 'checkout', 'features', 'description', 'avatar'];
 
   title.textContent = advent.offer.title;
   address.textContent = advent.offer.address;
@@ -76,14 +76,20 @@ adventsList.forEach((advent) => {
   createPhotoList(photos, cardElement);
   avatar.src = advent.author.avatar;
 
-  for (const element of allElementsInTemplate) {
-    if (!element.textContent && !element.src) {
+  // for (const element of allElementsInTemplate) {
+  //   if (!element.textContent && !element.src) {
+  //     element.classList.add('hidden');
+  //   }
+  // }
+
+  // if (!advent.author.avatar) {
+  //   avatar.classList.add('hidden');
+  // }
+
+  for (const element of allKeysInObject) {
+    if (!advent.offer.element) {
       element.classList.add('hidden');
     }
-  }
-
-  if (!advent.author.avatar) {
-    avatar.classList.add('hidden');
   }
 
   blockForCards.appendChild(cardElement);
