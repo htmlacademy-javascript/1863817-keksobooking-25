@@ -63,7 +63,7 @@ adventsList.forEach((advent) => {
   const description =  cardElement.querySelector('.popup__description');
   const avatar = cardElement.querySelector('.popup__avatar');
   const photos = advent.offer.photos;
-  const allElementsInTemplate= [title, address, price, type, capacity, time, features, description, avatar];
+  const keysWidthInfoForHtmlElements= {title, address, price, type, checkin: time, checkout : time, rooms: capacity, guests: capacity, features, description, avatar};
 
   title.textContent = advent.offer.title;
   address.textContent = advent.offer.address;
@@ -76,15 +76,11 @@ adventsList.forEach((advent) => {
   createPhotoList(photos, cardElement);
   avatar.src = advent.author.avatar;
 
-  blockForCards.appendChild(cardElement);
-
-  for (const element of allElementsInTemplate) {
-    if (!element.textContent && !element.src) {
-      element.classList.add('hidden');
+  for (const [key,val] of Object.entries(keysWidthInfoForHtmlElements)) {
+    if (!advent.offer[key] || !advent.offer[key].length) {
+      val.classList.add('hidden');
     }
   }
 
-  if (!advent.author.avatar) {
-    avatar.classList.add('hidden');
-  }
+  blockForCards.appendChild(cardElement);
 });
