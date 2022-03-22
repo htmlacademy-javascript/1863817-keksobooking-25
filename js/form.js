@@ -57,13 +57,13 @@ const priceInput = mainForm.querySelector('#price');
 const typeSelector = mainForm.querySelector('#type');
 
 function validateForPrice (value) {
-  if (value <= priceInput.max) {
+  if (value <= priceInput.max && value >= priceInput.min) {
     return true;
   }
   console.log(value);
   console.log(priceInput.max);
-  console.log(value + ' <= ' + priceInput.max);
-  // console.log(priceInput.value + ' <= ' + priceInput.max + ' && ' + priceInput.value + ' >= ' + priceInput.min);
+  console.log(priceInput.min);
+  console.log(priceInput.value + ' <= ' + priceInput.max + ' && ' + priceInput.value + ' >= ' + priceInput.min);
   return false;
 }
 
