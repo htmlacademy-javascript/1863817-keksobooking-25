@@ -63,7 +63,7 @@ adventsList.forEach((advent) => {
   const description =  cardElement.querySelector('.popup__description');
   const avatar = cardElement.querySelector('.popup__avatar');
   const photos = advent.offer.photos;
-  const allKeysInObject= ['title', 'address', 'price', 'type', 'rooms', 'guests', 'checkin', 'checkout', 'features', 'description', 'avatar'];
+  const keysWidthInfoForHtmlElements= {title, address, price, type, checkin: time, checkout : time, rooms: capacity, guests: capacity, features, description, avatar};
 
   title.textContent = advent.offer.title;
   address.textContent = advent.offer.address;
@@ -76,19 +76,9 @@ adventsList.forEach((advent) => {
   createPhotoList(photos, cardElement);
   avatar.src = advent.author.avatar;
 
-  // for (const element of allElementsInTemplate) {
-  //   if (!element.textContent && !element.src) {
-  //     element.classList.add('hidden');
-  //   }
-  // }
-
-  // if (!advent.author.avatar) {
-  //   avatar.classList.add('hidden');
-  // }
-
-  for (const element of allKeysInObject) {
-    if (!advent.offer.element) {
-      element.classList.add('hidden');
+  for (const [key,val] of Object.entries(keysWidthInfoForHtmlElements)) {
+    if (!advent.offer[key] || !advent.offer[key].length) {
+      val.classList.add('hidden');
     }
   }
 
