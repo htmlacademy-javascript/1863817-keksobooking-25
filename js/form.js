@@ -10,6 +10,7 @@ let typeError = 0;
 const timeInAdventInput = mainForm.querySelector('#timein');
 const timeOutAdventInput = mainForm.querySelector('#timeout');
 const resetButton = mainForm.querySelector('.ad-form__reset');
+let priceInputMin = '';
 
 // Map
 
@@ -68,7 +69,7 @@ pristine.addValidator (
 // Price and Type
 
 function validateForPrice () {
-  return +priceInput.value <= 100000 && +priceInput.value >= +priceInput.min;
+  return +priceInput.value <= 100000 && +priceInput.value >= priceInputMin;
 }
 
 typeSelector.addEventListener('change', () => {
@@ -80,19 +81,19 @@ typeSelector.addEventListener('change', () => {
 
   switch (typeSelector.value) {
     case 'flat':
-      priceInput.setAttribute('min', 1000);
+      priceInputMin =  1000;
       break;
     case 'bungalow':
-      priceInput.setAttribute('min', 0);
+      priceInputMin =  0;
       break;
     case 'house':
-      priceInput.setAttribute('min', 5000);
+      priceInputMin =  5000;
       break;
     case 'palace':
-      priceInput.setAttribute('min', 10000);
+      priceInputMin =  10000;
       break;
     case 'hotel':
-      priceInput.setAttribute('min', 3000);
+      priceInputMin =  3000;
       break;
   }
 });
@@ -114,15 +115,15 @@ function getErrorMessageForPrice () {
 
   if (+priceInput.value > 100000) {
     textError = 'Максимальное значение — 100.000';
-  } else if (+priceInput.min === 5000) {
+  } else if (priceInputMin === 5000) {
     textError = '«Дом» — минимальная цена 5 000';
-  } else if (+priceInput.min === 10000) {
+  } else if (priceInputMin === 10000) {
     textError = '«Дворец» — минимальная цена 10 000';
-  } else if (+priceInput.min === 3000) {
+  } else if (priceInputMin === 3000) {
     textError = '«Отель» — минимальная цена за ночь 3 000';
-  } else if (priceInput.min === '0') {
+  } else if (priceInputMin === 0) {
     textError = '«Бунгало» — минимальная цена за ночь 0';
-  } else if (+priceInput.min === 1000) {
+  } else if (priceInputMin === 1000) {
     textError = '«Квартира» — минимальная цена за ночь 1 000';
   }
   return textError;
