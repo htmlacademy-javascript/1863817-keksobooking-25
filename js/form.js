@@ -51,14 +51,106 @@ pristine.addValidator (
   'От 30 до 100 символов'
 );
 
+//////////////
+
+const priceInput = mainForm.querySelector('#price');
+const typeSelector = mainForm.querySelector('#type');
+
 function validateForPrice (value) {
-  return value <= 100000;
+  if (value <= priceInput.max) {
+    return true;
+  }
+  console.log(value);
+  console.log(priceInput.max);
+  console.log(value + ' <= ' + priceInput.max);
+  // console.log(priceInput.value + ' <= ' + priceInput.max + ' && ' + priceInput.value + ' >= ' + priceInput.min);
+  return false;
 }
 
+// priceInput.addEventListener('change', () => {
+//   console.log(priceInput.value);
+//   console.log(priceInput.min);
+//   console.log(priceInput.max);
+// });
+
+// function validateForPrice () {
+//   return priceInput.value <= priceInput.max && priceInput.value >= priceInput.min;
+// }
+
+typeSelector.addEventListener('change', () => {
+  switch (typeSelector.value) {
+    case 'flat':
+      // priceInput.min = 1000;
+      priceInput.setAttribute('min', 1000);
+      break;
+    case 'bungalow':
+      // priceInput.min = 0;
+      priceInput.setAttribute('min', 0);
+      break;
+    case 'house':
+      // priceInput.min = 5000;
+      priceInput.setAttribute('min', 5000);
+      break;
+    case 'palace':
+      // priceInput.min = 10000;
+      priceInput.setAttribute('min', 10000);
+      break;
+    case 'hotel':
+      // priceInput.min = 3000;
+      priceInput.setAttribute('min', 3000);
+      break;
+  }
+});
+
+// else if (priceInput.min === '0') {
+//   textError = '«Бунгало» — минимальная цена за ночь 0';
+// }
+
+function getErrorMessageForPrice () {
+  let textError = '';
+
+  if (priceInput.min === 1000) {
+    textError = '«Квартира» — минимальная цена за ночь 1 000';
+  } else if (priceInput.min === 5000) {
+    textError = '«Дом» — минимальная цена 5 000';
+  } else if (priceInput.min === 10000) {
+    textError = '«Дворец» — минимальная цена 10 000';
+  } else if (priceInput.min === 3000) {
+    textError = '«Отель» — минимальная цена за ночь 3 000';
+  } else if (priceInput.value > priceInput.max) {
+    textError = 'Максимальное значение — 100.000';
+  }
+  return textError;
+}
+// function getErrorMessageForPrice () {
+//   let textError = '';
+//   switch (priceInput.min) {
+//     case '1000':
+//       textError = '«Квартира» — минимальная цена за ночь 1 000';
+//       break;
+//     case '0':
+//       textError = '«Бунгало» — минимальная цена за ночь 0';
+//       break;
+//     case '5000':
+//       textError = '«Дом» — минимальная цена 5 000';
+//       break;
+//     case '10000':
+//       textError = '«Дворец» — минимальная цена 10 000';
+//       break;
+//     case '3000':
+//       textError = '«Отель» — минимальная цена за ночь 3 000';
+//       break;
+//     // default:
+//     //   textError = 'Максимальное значение — 100.000';
+//     //   break;
+//   }
+//   return textError;
+// }
+
 pristine.addValidator (
-  mainForm.querySelector('#price'),
+  priceInput,
   validateForPrice,
-  'Максимальное значение — 100.000'
+  getErrorMessageForPrice
 );
 
 ////////////////////
@@ -66,24 +158,26 @@ const roomNumberAdventInput = mainForm.querySelector('#room_number');
 const capacityAdventInput = mainForm.querySelector('#capacity');
 let typeError = 0;
 
-function validateRoomNumberAndCapacity (value) {
-  if (value === 1 && (capacityAdventInput.value > 1 || capacityAdventInput.value === 0)) {
+function validateRoomNumberAndCapacity () {
+  if (roomNumberAdventInput.value === '1' &&  capacityAdventInput.value !== '1') {
     typeError = 1;
     return false;
-  } else if (value === 2 && (capacityAdventInput.value > 2 || capacityAdventInput.value === 0)) {
+  } else if (roomNumberAdventInput.value === '2' && (capacityAdventInput.value === '3' || capacityAdventInput.value === '0')) {
     typeError = 2;
     return false;
-  } else if (value === 3 && (capacityAdventInput.value > 3 || capacityAdventInput.value === 0)) {
+  } else if (roomNumberAdventInput.value === '3' &&  capacityAdventInput.value === '0') {
     typeError = 3;
     return false;
-  } else if (value === 100  && capacityAdventInput.value !== 0) {
+  } else if (roomNumberAdventInput.value === '100'  && capacityAdventInput.value !== '0') {
     typeError = 4;
     return false;
   }
+
+  typeError = 0;
   return true;
 }
 
-function getErrorMessage () {
+function getErrorMessageForRoomNumberAndCapacity () {
   if (typeError === 1) {
     return '1 комната — «для 1 гостя»';
   } else if (typeError === 2) {
@@ -95,15 +189,54 @@ function getErrorMessage () {
   }
 }
 
+roomNumberAdventInput.addEventListener('change', () => {
+  const capacityFieldset = mainForm.querySelector('.ad-form__element--capacity');
+  const lastErrorMessage = capacityFieldset.querySelector('.ad-form--error');
+  lastErrorMessage.textContent = '';
+});
+
+capacityAdventInput.addEventListener('change', () => {
+  const roomNumberFieldset = mainForm.querySelector('.ad-form__element--room-number');
+  const lastErrorMessage = roomNumberFieldset.querySelector('.ad-form--error');
+  lastErrorMessage.textContent = '';
+});
+
 pristine.addValidator (
   roomNumberAdventInput,
-  validateRoomNumberAndCapacity(),
-  getErrorMessage,
+  validateRoomNumberAndCapacity,
+  getErrorMessageForRoomNumberAndCapacity,
+);
+
+pristine.addValidator (
+  capacityAdventInput,
+  validateRoomNumberAndCapacity,
+  getErrorMessageForRoomNumberAndCapacity,
 );
 ///////////////////////
+
+const timeInAdventInput = mainForm.querySelector('#timein');
+const timeOutAdventInput = mainForm.querySelector('#timeout');
+
+function validateTimeInputs () {
+  if (timeInAdventInput.value === timeOutAdventInput.value) {
+    return true;
+  }
+  return false;
+}
+
+pristine.addValidator (
+  timeInAdventInput,
+  validateTimeInputs,
+  'Поля времени заезда и отъезда должны быть равны',
+);
+
+pristine.addValidator (
+  timeOutAdventInput,
+  validateTimeInputs,
+  'Поля времени заезда и отъезда должны быть равны',
+);
 
 mainForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   Pristine.validate();
 });
-
