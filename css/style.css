@@ -85,7 +85,7 @@ fieldset {
 
 .map__canvas {
   width: 100%;
-  /* height: 500px; */
+  height: 500px;
   background-color: #dddddd;
 }
 
@@ -273,6 +273,12 @@ fieldset {
 .ad-form-header {
   width: 100%;
   padding-bottom: 20px;
+}
+
+.ad-form--error {
+  display: block;
+  font-size: 0.85em;
+  color: #c00;
 }
 
 .ad-form-header__title {
