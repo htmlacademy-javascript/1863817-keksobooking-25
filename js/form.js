@@ -68,11 +68,7 @@ pristine.addValidator (
 
 // Price and Type
 
-function validateForPrice () {
-  return +priceInput.value <= 100000 && +priceInput.value >= priceInputMin;
-}
-
-typeSelector.addEventListener('change', () => {
+const check = function () {
   const priceFieldset = mainForm.querySelector('.ad-form__element--price');
   const lastErrorMessage = priceFieldset.querySelector('.ad-form--error');
   if (lastErrorMessage) {
@@ -96,18 +92,25 @@ typeSelector.addEventListener('change', () => {
       priceInputMin =  3000;
       break;
   }
-});
+};
 
-// typeSelector.addEventListener('change', () => {
-//   const priceFieldset = mainForm.querySelector('.ad-form__element--price');
-//   const lastErrorMessage = priceFieldset.querySelector('.ad-form--error');
-//   lastErrorMessage.textContent = '';
-// });
+function validateForPrice () {
+  check();
 
-priceInput.addEventListener('change', () => {
+  if (+priceInput.value <= 100000 && +priceInput.value >= priceInputMin) {
+    return true;
+  }
+  return false;
+}
+
+typeSelector.addEventListener('change', (check));
+
+priceInput.addEventListener('input', () => {
   const typeFieldset = mainForm.querySelector('.ad-form__element--type');
   const lastErrorMessage = typeFieldset.querySelector('.ad-form--error');
-  lastErrorMessage.textContent = '';
+  if (lastErrorMessage) {
+    lastErrorMessage.textContent = '';
+  }
 });
 
 function getErrorMessageForPrice () {
@@ -126,6 +129,7 @@ function getErrorMessageForPrice () {
   } else if (priceInputMin === 1000) {
     textError = '«Квартира» — минимальная цена за ночь 1 000';
   }
+
   return textError;
 }
 
