@@ -2,6 +2,17 @@ const mainForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
 const mainFormElements = mainForm.children;
 const mapFiltersElement = mapFilters.children;
+const priceInput = mainForm.querySelector('#price');
+const typeSelector = mainForm.querySelector('#type');
+const roomNumberAdventInput = mainForm.querySelector('#room_number');
+const capacityAdventInput = mainForm.querySelector('#capacity');
+let typeError = 0;
+const timeInAdventInput = mainForm.querySelector('#timein');
+const timeOutAdventInput = mainForm.querySelector('#timeout');
+const resetButton = mainForm.querySelector('.ad-form__reset');
+let priceInputMin = '';
+
+// Map
 
 const makePageNoActive = function () {
   mainForm.classList.add('ad-form--disabled');
@@ -32,6 +43,8 @@ const makePageActive = function () {
 makePageNoActive();
 makePageActive();
 
+// Pristine
+
 const pristine = new Pristine(mainForm, {
   classTo: 'ad-form__element',
   errorClass: 'form__item--invalid',
@@ -40,6 +53,8 @@ const pristine = new Pristine(mainForm, {
   errorTextTag: 'span',
   errorTextClass: 'ad-form--error'
 });
+
+// Title
 
 function validateForTitleAdvent (value) {
   return value.length >= 30 && value.length <= 100;
@@ -51,39 +66,107 @@ pristine.addValidator (
   'От 30 до 100 символов'
 );
 
-function validateForPrice (value) {
-  return value <= 100000;
+// Price and Type
+
+const check = function () {
+  const priceFieldset = mainForm.querySelector('.ad-form__element--price');
+  const lastErrorMessage = priceFieldset.querySelector('.ad-form--error');
+  if (lastErrorMessage) {
+    lastErrorMessage.textContent = '';
+  }
+
+  switch (typeSelector.value) {
+    case 'flat':
+      priceInputMin =  1000;
+      break;
+    case 'bungalow':
+      priceInputMin =  0;
+      break;
+    case 'house':
+      priceInputMin =  5000;
+      break;
+    case 'palace':
+      priceInputMin =  10000;
+      break;
+    case 'hotel':
+      priceInputMin =  3000;
+      break;
+  }
+};
+
+function validateForPrice () {
+  check();
+
+  if (+priceInput.value <= 100000 && +priceInput.value >= priceInputMin) {
+    return true;
+  }
+  return false;
+}
+
+typeSelector.addEventListener('change', (check));
+
+priceInput.addEventListener('input', () => {
+  const typeFieldset = mainForm.querySelector('.ad-form__element--type');
+  const lastErrorMessage = typeFieldset.querySelector('.ad-form--error');
+  if (lastErrorMessage) {
+    lastErrorMessage.textContent = '';
+  }
+});
+
+function getErrorMessageForPrice () {
+  let textError = '';
+
+  if (+priceInput.value > 100000) {
+    textError = 'Максимальное значение — 100.000';
+  } else if (priceInputMin === 5000) {
+    textError = '«Дом» — минимальная цена 5 000';
+  } else if (priceInputMin === 10000) {
+    textError = '«Дворец» — минимальная цена 10 000';
+  } else if (priceInputMin === 3000) {
+    textError = '«Отель» — минимальная цена за ночь 3 000';
+  } else if (priceInputMin === 0) {
+    textError = '«Бунгало» — минимальная цена за ночь 0';
+  } else if (priceInputMin === 1000) {
+    textError = '«Квартира» — минимальная цена за ночь 1 000';
+  }
+
+  return textError;
 }
 
 pristine.addValidator (
-  mainForm.querySelector('#price'),
+  priceInput,
   validateForPrice,
-  'Максимальное значение — 100.000'
+  getErrorMessageForPrice
 );
 
-////////////////////
-const roomNumberAdventInput = mainForm.querySelector('#room_number');
-const capacityAdventInput = mainForm.querySelector('#capacity');
-let typeError = 0;
+pristine.addValidator (
+  typeSelector,
+  validateForPrice,
+  getErrorMessageForPrice
+);
 
-function validateRoomNumberAndCapacity (value) {
-  if (value === 1 && (capacityAdventInput.value > 1 || capacityAdventInput.value === 0)) {
+// Room and Capacity
+
+function validateRoomNumberAndCapacity () {
+  if (roomNumberAdventInput.value === '1' &&  capacityAdventInput.value !== '1') {
     typeError = 1;
     return false;
-  } else if (value === 2 && (capacityAdventInput.value > 2 || capacityAdventInput.value === 0)) {
+  } else if (roomNumberAdventInput.value === '2' && (capacityAdventInput.value === '3' || capacityAdventInput.value === '0')) {
     typeError = 2;
     return false;
-  } else if (value === 3 && (capacityAdventInput.value > 3 || capacityAdventInput.value === 0)) {
+  } else if (roomNumberAdventInput.value === '3' &&  capacityAdventInput.value === '0') {
     typeError = 3;
     return false;
-  } else if (value === 100  && capacityAdventInput.value !== 0) {
+  } else if (roomNumberAdventInput.value === '100'  && capacityAdventInput.value !== '0') {
     typeError = 4;
     return false;
   }
+
+  typeError = 0;
   return true;
 }
 
-function getErrorMessage () {
+function getErrorMessageForRoomNumberAndCapacity () {
   if (typeError === 1) {
     return '1 комната — «для 1 гостя»';
   } else if (typeError === 2) {
@@ -95,15 +178,58 @@ function getErrorMessage () {
   }
 }
 
+roomNumberAdventInput.addEventListener('change', () => {
+  const capacityFieldset = mainForm.querySelector('.ad-form__element--capacity');
+  const lastErrorMessage = capacityFieldset.querySelector('.ad-form--error');
+  lastErrorMessage.textContent = '';
+});
+
+capacityAdventInput.addEventListener('change', () => {
+  const roomNumberFieldset = mainForm.querySelector('.ad-form__element--room-number');
+  const lastErrorMessage = roomNumberFieldset.querySelector('.ad-form--error');
+  lastErrorMessage.textContent = '';
+});
+
 pristine.addValidator (
   roomNumberAdventInput,
-  validateRoomNumberAndCapacity(),
-  getErrorMessage,
+  validateRoomNumberAndCapacity,
+  getErrorMessageForRoomNumberAndCapacity,
 );
-///////////////////////
+
+pristine.addValidator (
+  capacityAdventInput,
+  validateRoomNumberAndCapacity,
+  getErrorMessageForRoomNumberAndCapacity,
+);
+
+// Time in and out
+
+function validateTimeInputs () {
+  return timeInAdventInput.value === timeOutAdventInput.value;
+}
+
+pristine.addValidator (
+  timeInAdventInput,
+  validateTimeInputs,
+  'Поля времени заезда и отъезда должны быть равны',
+);
+
+pristine.addValidator (
+  timeOutAdventInput,
+  validateTimeInputs,
+  'Поля времени заезда и отъезда должны быть равны',
+);
+
+// Global
+
+resetButton.addEventListener('click', () => {
+  const ErrorMessages = mainForm.querySelectorAll('.ad-form--error');
+  for (let i = 0; i <= ErrorMessages.length - 1; i++) {
+    ErrorMessages[i].textContent = '';
+  }
+});
 
 mainForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   Pristine.validate();
 });
-
