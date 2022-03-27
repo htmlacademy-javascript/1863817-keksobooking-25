@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="nouislider/nouislider.css">
+  <link rel="stylesheet" href="leaflet/leaflet.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кексобукинг</title>
 </head>
@@ -79,7 +81,7 @@
               <img src="img/muffin-grey.svg" alt="Аватар пользователя" width="40" height="44">
             </div>
             <div class="ad-form__field">
-              <input type="file" id="avatar" name="avatar" class="ad-form-header__input visually-hidden" required>
+              <input type="file" id="avatar" name="avatar" class="ad-form-header__input visually-hidden">
               <label class="ad-form-header__drop-zone" for="avatar">Загрузить<br>фото...</label>
             </div>
             <p class="ad-form-header__info">Заполните все обязательные поля, назначьте цену, загрузите аватар и фото жилья. Придумайте интересное описание. Оно сделает объявление более живым и привлекательным. Получившееся объявление должно давать гостям полное представление о вашем жилье.</p>
@@ -91,7 +93,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text" required required data-pristine-required-message="Обязательное поле">
+          <input id="address" name="address" type="text" required required data-pristine-required-message="Обязательное поле" readonly>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--type">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -162,7 +164,7 @@
           <label class="ad-form__label">Фотография жилья</label>
           <div class="ad-form__photo-container">
             <div class="ad-form__upload">
-              <input type="file" id="images" name="images" class="ad-form__input visually-hidden" required>
+              <input type="file" id="images" name="images" class="ad-form__input visually-hidden">
               <label for="images" class="ad-form__drop-zone">Загрузить<br>фото...</label>
             </div>
             <div class="ad-form__photo"></div>
@@ -232,6 +234,8 @@
   </template>
 
   <script src="pristine/pristine.min.js"></script>
+  <script src="nouislider/nouislider.js"></script>
+  <script src="leaflet/leaflet.js"></script>
   <script src="js/main.js" type="module"></script>
 
 </body>

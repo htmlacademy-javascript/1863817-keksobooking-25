@@ -1,11 +1,9 @@
-import {adventsList} from './data.js';
-
 const blockForCards = document.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
 
-const traslateTypes = function (englishWord) {
+const translateTypes = function (englishWord) {
   let russianWord = '';
 
   switch (englishWord) {
@@ -51,7 +49,7 @@ const createPhotoList = function(linkList, templateClone) {
   }
 };
 
-adventsList.forEach((advent) => {
+const createCardForMapPopup = function (advent) {
   const cardElement = cardTemplate.cloneNode(true);
   const title = cardElement.querySelector('.popup__title');
   const address = cardElement.querySelector('.popup__text--address');
@@ -68,12 +66,20 @@ adventsList.forEach((advent) => {
   title.textContent = advent.offer.title;
   address.textContent = advent.offer.address;
   price.textContent = `${advent.offer.price} ₽/ночь`;
-  type.textContent = traslateTypes(advent.offer.type);
+  type.textContent = translateTypes(advent.offer.type);
   capacity.textContent = `${advent.offer.rooms} комнаты для ${advent.offer.guests} гостей`;
   time.textContent = `Заезд после ${advent.offer.checkin}, выезд до ${advent.offer.checkout}`;
-  features.textContent = advent.offer.features.join(', ');
-  description.textContent = advent.offer.description;
-  createPhotoList(photos, cardElement);
+
+  if (advent.offer.features) {
+    features.textContent = advent.offer.features.join(', ');
+  }
+
+  if (advent.offer.description) {
+    description.textContent = advent.offer.description;
+  }
+  if (photos) {
+    createPhotoList(photos, cardElement);
+  }
   avatar.src = advent.author.avatar;
 
   for (const [key,val] of Object.entries(keysWidthInfoForHtmlElements)) {
@@ -81,6 +87,10 @@ adventsList.forEach((advent) => {
       val.classList.add('hidden');
     }
   }
+  return cardElement;
+};
 
-  blockForCards.appendChild(cardElement);
-});
+export {
+  blockForCards,
+  createCardForMapPopup,
+};

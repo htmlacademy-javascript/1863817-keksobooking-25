@@ -10,7 +10,9 @@ let typeError = 0;
 const timeInAdventInput = mainForm.querySelector('#timein');
 const timeOutAdventInput = mainForm.querySelector('#timeout');
 const resetButton = mainForm.querySelector('.ad-form__reset');
+const submitButton = mainForm.querySelector('.ad-form__submit');
 let priceInputMin = '';
+const sliderElement = document.querySelector('.ad-form__slider');
 
 // Map
 
@@ -40,9 +42,6 @@ const makePageActive = function () {
   }
 };
 
-makePageNoActive();
-makePageActive();
-
 // Pristine
 
 const pristine = new Pristine(mainForm, {
@@ -68,7 +67,31 @@ pristine.addValidator (
 
 // Price and Type
 
-const check = function () {
+noUiSlider.create(sliderElement, {
+  range: {
+    min: 0,
+    max: 100000,
+  },
+  start: 0,
+  step: 1000,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      return value.toFixed(0);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
+
+sliderElement.noUiSlider.on('update', () => {
+  // if (sliderElement.noUiSlider.get() > 0) {
+  priceInput.value = sliderElement.noUiSlider.get();
+  // }
+});
+
+const checkChangeTypeSelector = function () {
   const priceFieldset = mainForm.querySelector('.ad-form__element--price');
   const lastErrorMessage = priceFieldset.querySelector('.ad-form--error');
   if (lastErrorMessage) {
@@ -78,24 +101,46 @@ const check = function () {
   switch (typeSelector.value) {
     case 'flat':
       priceInputMin =  1000;
+      priceInput.placeholder = 1000;
+      // priceInput.value = 1000;
       break;
     case 'bungalow':
       priceInputMin =  0;
+      priceInput.placeholder = 0;
+      // priceInput.value = 0;
       break;
     case 'house':
       priceInputMin =  5000;
+      priceInput.placeholder = 5000;
+      // priceInput.value = 5000;
       break;
     case 'palace':
       priceInputMin =  10000;
+      priceInput.placeholder = 10000;
+      // priceInput.value = 10000;
       break;
     case 'hotel':
       priceInputMin =  3000;
+      priceInput.placeholder = 3000;
+      // priceInput.value = 3000;
       break;
   }
+
+  // if (+priceInput.value === priceInputMin || priceInput.value === '') {
+  //   sliderElement.noUiSlider.updateOptions({
+  //     range: {
+  //       min: 0,
+  //       max: 100000,
+  //     },
+  //     start: priceInputMin,
+  //     step: 100,
+  //     connect: 'lower',
+  //   });
+  // }
 };
 
 function validateForPrice () {
-  check();
+  checkChangeTypeSelector();
 
   if (+priceInput.value <= 100000 && +priceInput.value >= priceInputMin) {
     return true;
@@ -103,7 +148,7 @@ function validateForPrice () {
   return false;
 }
 
-typeSelector.addEventListener('change', (check));
+typeSelector.addEventListener('change', (checkChangeTypeSelector));
 
 priceInput.addEventListener('input', () => {
   const typeFieldset = mainForm.querySelector('.ad-form__element--type');
@@ -231,5 +276,55 @@ resetButton.addEventListener('click', () => {
 
 mainForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  Pristine.validate();
+  const isValid = pristine.validate();
+
+  if (isValid) {
+    const formData = new FormData(evt.target);
+
+    fetch(
+      'https://25.javascript.pages.academy/keksobooking',
+      {
+        method: 'POST',
+        body: formData,
+        type: 'multipart/form-data',
+      },
+    )
+      .then(() => {
+        submitButton.setAttribute('disabled', 'disabled');
+        const successTemplate = document.querySelector('#success')
+          .content
+          .querySelector('.success');
+        const seccessMessage = successTemplate.cloneNode(true);
+        document.body.append(seccessMessage);
+        evt.target.reset();
+        document.addEventListener('click', () => {
+          seccessMessage.remove();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            seccessMessage.remove();
+          }
+        });
+      })
+      .catch(() => {
+        const errorTemplate = document.querySelector('#error')
+          .content
+          .querySelector('.error');
+        const errorMessage = errorTemplate.cloneNode(true);
+        document.body.append(errorMessage);
+        const errorButtonClose = errorMessage.querySelector('.error__button');
+        errorButtonClose.addEventListener('click', () => {
+          errorMessage.remove();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            errorMessage.remove();
+          }
+        });
+      });
+  }
 });
+
+export {
+  makePageActive,
+  makePageNoActive};
