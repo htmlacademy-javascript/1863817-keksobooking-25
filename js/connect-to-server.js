@@ -1,10 +1,10 @@
 import {map, iconFormarkerAdvents} from './map.js';
 import {createCardForMapPopup} from './generation-dom-elements.js';
 import {showAlert} from './util.js';
-// import {typeFilterChange, newAdventsList} from './sortAdvents.js';
-import {state} from './main.js';
+import {typeFilterChange, newAdventsList} from './sortAdvents.js';
+import { state } from './main.js';
 
-let layerForAdvents;
+let layerForAdvents = L.layerGroup();
 
 const renderMarkersForMap = function (advents) {
   layerForAdvents.clearLayers();
@@ -45,5 +45,5 @@ const getData = function (onSuccess) {
 
 getData((advents) => {
   renderMarkersForMap(advents.slice(0, 10));
-  // typeFilterChange(() => renderMarkersForMap(newAdventsList));
+  typeFilterChange(() => renderMarkersForMap(newAdventsList));
 });
