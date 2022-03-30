@@ -1,11 +1,14 @@
 import {map, iconFormarkerAdvents} from './map.js';
 import {createCardForMapPopup} from './generation-dom-elements.js';
 import {showAlert} from './util.js';
+import {typeFilterChange} from './sortAdvents.js';
 
-fetch('https://25.javascript.pages.academy/keksobooking/data')
-  .then((response) => response.json())
-  .then((advents) => {
-    advents.forEach((advent) => {
+const AdventList = [];
+
+const getMarkersForMap = function (advents) {
+  advents
+    .slice
+    .forEach((advent) => {
       const markerAdvents = L.marker(
         {
           lat: advent.location.lat,
@@ -16,13 +19,48 @@ fetch('https://25.javascript.pages.academy/keksobooking/data')
         }
       );
 
+      // markerAdvents.removeLayer(map);
+
       markerAdvents
         .addTo(map)
         .bindPopup(createCardForMapPopup(advent));
-    });
-  })
-  .catch(() => {
-    showAlert('При загрузке данных с сервара произошла ошибка, попробуйте обновить страницу');
-  });
 
-// Если понадобиться вывести не 50 а 10, написать цикл фор
+      // markerAdvents.clearLayers();
+    })
+    .slice(0, 10);
+};
+
+const getData = function (onSuccess) {
+  fetch('https://25.javascript.pages.academy/keksobooking/data')
+    .then((response) => response.json())
+    .then((advents) => onSuccess(advents))
+    .catch(() => {
+      showAlert('При загрузке данных с сервара произошла ошибка, попробуйте обновить страницу');
+    });
+};
+
+getData((advents) => {
+  getMarkersForMap(advents);
+  typeFilterChange(() => getMarkersForMap(advents));
+});
+
+// for (let i = 0; i < 10; i++) {
+//   const markerAdvents = L.marker(
+//     {
+//       lat: advents[i].location.lat,
+//       lng: advents[i].location.lng,
+//     },
+//     {
+//       icon: iconFormarkerAdvents,
+//     }
+//   );
+
+//   AdventList.push(advents[i]);
+
+//   markerAdvents
+//     .addTo(map)
+//     .bindPopup(createCardForMapPopup(advents[i]));
+// }
+// console.log(AdventList);
+
+export {AdventList};
