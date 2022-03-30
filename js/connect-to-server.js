@@ -1,13 +1,15 @@
 import {map, iconFormarkerAdvents} from './map.js';
 import {createCardForMapPopup} from './generation-dom-elements.js';
 import {showAlert} from './util.js';
-import {typeFilterChange} from './sortAdvents.js';
+// import {typeFilterChange, newAdventsList} from './sortAdvents.js';
+import {state} from './main.js';
 
-const AdventList = [];
+let layerForAdvents;
 
-const getMarkersForMap = function (advents) {
+const renderMarkersForMap = function (advents) {
+  layerForAdvents.clearLayers();
+
   advents
-    .slice
     .forEach((advent) => {
       const markerAdvents = L.marker(
         {
@@ -19,48 +21,29 @@ const getMarkersForMap = function (advents) {
         }
       );
 
-      // markerAdvents.removeLayer(map);
-
       markerAdvents
-        .addTo(map)
         .bindPopup(createCardForMapPopup(advent));
 
-      // markerAdvents.clearLayers();
-    })
-    .slice(0, 10);
+      layerForAdvents = L.layerGroup([markerAdvents]);
+
+      layerForAdvents.addTo(map);
+    });
 };
 
+
 const getData = function (onSuccess) {
-  fetch('https://25.javascript.pages.academy/keksobooking/data')
-    .then((response) => response.json())
+  return fetch('https://25.javascript.pages.academy/keksobooking/data')
+    .then((response) =>  response.json())
     .then((advents) => onSuccess(advents))
+    .then((advents) => {
+      state.advents = advents;
+    })
     .catch(() => {
       showAlert('При загрузке данных с сервара произошла ошибка, попробуйте обновить страницу');
     });
 };
 
 getData((advents) => {
-  getMarkersForMap(advents);
-  typeFilterChange(() => getMarkersForMap(advents));
+  renderMarkersForMap(advents.slice(0, 10));
+  // typeFilterChange(() => renderMarkersForMap(newAdventsList));
 });
-
-// for (let i = 0; i < 10; i++) {
-//   const markerAdvents = L.marker(
-//     {
-//       lat: advents[i].location.lat,
-//       lng: advents[i].location.lng,
-//     },
-//     {
-//       icon: iconFormarkerAdvents,
-//     }
-//   );
-
-//   AdventList.push(advents[i]);
-
-//   markerAdvents
-//     .addTo(map)
-//     .bindPopup(createCardForMapPopup(advents[i]));
-// }
-// console.log(AdventList);
-
-export {AdventList};

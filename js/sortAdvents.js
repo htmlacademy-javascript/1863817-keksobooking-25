@@ -1,29 +1,25 @@
-import {AdventList} from './connect-to-server.js';
+// import {state} from './main.js';
 
-const housingTypeFilter = document.querySelector('#housing-type');
+// const housingTypeFilter = document.querySelector('#housing-type');
+// let newAdventsList= '';
 
-// const typeFilterChange = function () {
+// const typeFilterChange = function (cb) {
 //   housingTypeFilter.addEventListener('change', () => {
-//     AdventList.forEach((advent) => {
-//       if (advent.offer.type !== housingTypeFilter.value) {
-//         AdventList.remove(advent);
-//       }
-//     });
+//     if (state.advents) {
+//       newAdventsList = state.advents.slice();
+
+//       newAdventsList.forEach((advent, i) => {
+//         if (advent.offer.type !== housingTypeFilter.value) {
+//           newAdventsList.splice(i, 1);
+//         }
+//       });
+//     }
 //   });
+//   cb(newAdventsList);
 // };
 
-const typeFilterChange = function (cb) {
-  housingTypeFilter.addEventListener('change', () => {
-    AdventList.forEach((advent) => {
-      if (advent.offer.type !== housingTypeFilter.value) {
-        // const index = AdventList.indexOf(advent);
-        // AdventList.splice(index, 1);
-        // console.log(AdventList);
+// export {
+//   typeFilterChange,
+//   newAdventsList
+// };
 
-      }
-    });
-    cb();
-  });
-};
-
-export {typeFilterChange};
