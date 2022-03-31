@@ -1,8 +1,6 @@
 import {map, iconFormarkerAdvents} from './map.js';
 import {createCardForMapPopup} from './generation-dom-elements.js';
 import {showAlert} from './util.js';
-// import {typeFilterChange, newAdventsList} from './sortAdvents.js';
-// import { state } from './main.js';
 
 const state = {
   advents: null,

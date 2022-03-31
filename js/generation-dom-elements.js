@@ -82,11 +82,11 @@ const createCardForMapPopup = function (advent) {
   }
   avatar.src = advent.author.avatar;
 
-  for (const [key,val] of Object.entries(keysWidthInfoForHtmlElements)) {
-    if (!advent.offer[key] || !advent.offer[key].length) {
-      val.classList.add('hidden');
-    }
-  }
+  // for (const [key,val] of Object.entries(keysWidthInfoForHtmlElements)) {
+  //   if (!advent.offer[key]) {
+  //     val.classList.add('hidden');
+  //   }
+  // }
   return cardElement;
 };
 
