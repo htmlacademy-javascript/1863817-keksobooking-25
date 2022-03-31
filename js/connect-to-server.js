@@ -1,10 +1,14 @@
 import {map, iconFormarkerAdvents} from './map.js';
 import {createCardForMapPopup} from './generation-dom-elements.js';
 import {showAlert} from './util.js';
-import {typeFilterChange, newAdventsList} from './sortAdvents.js';
-import { state } from './main.js';
+// import {typeFilterChange, newAdventsList} from './sortAdvents.js';
+// import { state } from './main.js';
 
-let layerForAdvents = L.layerGroup();
+const state = {
+  advents: null,
+};
+
+const layerForAdvents = L.layerGroup();
 
 const renderMarkersForMap = function (advents) {
   layerForAdvents.clearLayers();
@@ -22,20 +26,19 @@ const renderMarkersForMap = function (advents) {
       );
 
       markerAdvents
+        .addTo(layerForAdvents)
         .bindPopup(createCardForMapPopup(advent));
-
-      layerForAdvents = L.layerGroup([markerAdvents]);
-
-      layerForAdvents.addTo(map);
     });
+
+  layerForAdvents.addTo(map);
 };
 
 
 const getData = function (onSuccess) {
   return fetch('https://25.javascript.pages.academy/keksobooking/data')
     .then((response) =>  response.json())
-    .then((advents) => onSuccess(advents))
     .then((advents) => {
+      onSuccess(advents);
       state.advents = advents;
     })
     .catch(() => {
@@ -45,5 +48,6 @@ const getData = function (onSuccess) {
 
 getData((advents) => {
   renderMarkersForMap(advents.slice(0, 10));
-  typeFilterChange(() => renderMarkersForMap(newAdventsList));
 });
+
+export {renderMarkersForMap, state};
