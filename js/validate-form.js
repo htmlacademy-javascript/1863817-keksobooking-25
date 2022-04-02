@@ -1,7 +1,6 @@
+import {eventListenerForDocumentClick} from './util.js';
+
 const mainForm = document.querySelector('.ad-form');
-const mapFilters = document.querySelector('.map__filters');
-const mainFormElements = mainForm.children;
-const mapFiltersElement = mapFilters.children;
 const priceInput = mainForm.querySelector('#price');
 const typeSelector = mainForm.querySelector('#type');
 const roomNumberAdventInput = mainForm.querySelector('#room_number');
@@ -10,40 +9,9 @@ let typeError = 0;
 const timeInAdventInput = mainForm.querySelector('#timein');
 const timeOutAdventInput = mainForm.querySelector('#timeout');
 const resetButton = mainForm.querySelector('.ad-form__reset');
+const submitButton = mainForm.querySelector('.ad-form__submit');
 let priceInputMin = '';
-
-// Map
-
-const makePageNoActive = function () {
-  mainForm.classList.add('ad-form--disabled');
-  mapFilters.classList.add('ad-form--disabled');
-
-  for (const element of mainFormElements) {
-    element.setAttribute('disabled', 'disabled');
-  }
-
-  for (const element of mapFiltersElement) {
-    element.setAttribute('disabled', 'disabled');
-  }
-};
-
-const makePageActive = function () {
-  mainForm.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('ad-form--disabled');
-
-  for (const element of mainFormElements) {
-    element.removeAttribute('disabled', 'disabled');
-  }
-
-  for (const element of mapFiltersElement) {
-    element.removeAttribute('disabled', 'disabled');
-  }
-};
-
-makePageNoActive();
-makePageActive();
-
-// Pristine
+const sliderElement = document.querySelector('.ad-form__slider');
 
 const pristine = new Pristine(mainForm, {
   classTo: 'ad-form__element',
@@ -54,11 +22,7 @@ const pristine = new Pristine(mainForm, {
   errorTextClass: 'ad-form--error'
 });
 
-// Title
-
-function validateForTitleAdvent (value) {
-  return value.length >= 30 && value.length <= 100;
-}
+const validateForTitleAdvent = (value) => value.length >= 30 && value.length <= 100;
 
 pristine.addValidator (
   mainForm.querySelector('#title'),
@@ -66,9 +30,29 @@ pristine.addValidator (
   'От 30 до 100 символов'
 );
 
-// Price and Type
+noUiSlider.create(sliderElement, {
+  range: {
+    min: 0,
+    max: 100000,
+  },
+  start: 0,
+  step: 1000,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      return value.toFixed(0);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
 
-const check = function () {
+sliderElement.noUiSlider.on('update', () => {
+  priceInput.value = sliderElement.noUiSlider.get();
+});
+
+const checkChangeTypeSelector = () => {
   const priceFieldset = mainForm.querySelector('.ad-form__element--price');
   const lastErrorMessage = priceFieldset.querySelector('.ad-form--error');
   if (lastErrorMessage) {
@@ -78,32 +62,37 @@ const check = function () {
   switch (typeSelector.value) {
     case 'flat':
       priceInputMin =  1000;
+      priceInput.placeholder = 1000;
       break;
     case 'bungalow':
       priceInputMin =  0;
+      priceInput.placeholder = 0;
       break;
     case 'house':
       priceInputMin =  5000;
+      priceInput.placeholder = 5000;
       break;
     case 'palace':
       priceInputMin =  10000;
+      priceInput.placeholder = 10000;
       break;
     case 'hotel':
       priceInputMin =  3000;
+      priceInput.placeholder = 3000;
       break;
   }
 };
 
-function validateForPrice () {
-  check();
+const validateForPrice = () => {
+  checkChangeTypeSelector();
 
   if (+priceInput.value <= 100000 && +priceInput.value >= priceInputMin) {
     return true;
   }
   return false;
-}
+};
 
-typeSelector.addEventListener('change', (check));
+typeSelector.addEventListener('change', (checkChangeTypeSelector));
 
 priceInput.addEventListener('input', () => {
   const typeFieldset = mainForm.querySelector('.ad-form__element--type');
@@ -113,25 +102,25 @@ priceInput.addEventListener('input', () => {
   }
 });
 
-function getErrorMessageForPrice () {
+const getErrorMessageForPrice = () => {
   let textError = '';
 
   if (+priceInput.value > 100000) {
     textError = 'Максимальное значение — 100.000';
   } else if (priceInputMin === 5000) {
-    textError = '«Дом» — минимальная цена 5 000';
+    textError = 'Минимальная цена 5 000';
   } else if (priceInputMin === 10000) {
-    textError = '«Дворец» — минимальная цена 10 000';
+    textError = 'Минимальная цена 10 000';
   } else if (priceInputMin === 3000) {
-    textError = '«Отель» — минимальная цена за ночь 3 000';
+    textError = 'Минимальная цена 3 000';
   } else if (priceInputMin === 0) {
-    textError = '«Бунгало» — минимальная цена за ночь 0';
+    textError = 'Минимальная цена 0';
   } else if (priceInputMin === 1000) {
-    textError = '«Квартира» — минимальная цена за ночь 1 000';
+    textError = 'Минимальная цена 1 000';
   }
 
   return textError;
-}
+};
 
 pristine.addValidator (
   priceInput,
@@ -145,9 +134,7 @@ pristine.addValidator (
   getErrorMessageForPrice
 );
 
-// Room and Capacity
-
-function validateRoomNumberAndCapacity () {
+const validateRoomNumberAndCapacity = () => {
   if (roomNumberAdventInput.value === '1' &&  capacityAdventInput.value !== '1') {
     typeError = 1;
     return false;
@@ -164,9 +151,9 @@ function validateRoomNumberAndCapacity () {
 
   typeError = 0;
   return true;
-}
+};
 
-function getErrorMessageForRoomNumberAndCapacity () {
+const getErrorMessageForRoomNumberAndCapacity = () => {
   if (typeError === 1) {
     return '1 комната — «для 1 гостя»';
   } else if (typeError === 2) {
@@ -176,7 +163,7 @@ function getErrorMessageForRoomNumberAndCapacity () {
   } else if (typeError === 4) {
     return '100 комнат — «не для гостей»';
   }
-}
+};
 
 roomNumberAdventInput.addEventListener('change', () => {
   const capacityFieldset = mainForm.querySelector('.ad-form__element--capacity');
@@ -202,11 +189,7 @@ pristine.addValidator (
   getErrorMessageForRoomNumberAndCapacity,
 );
 
-// Time in and out
-
-function validateTimeInputs () {
-  return timeInAdventInput.value === timeOutAdventInput.value;
-}
+const validateTimeInputs = () => timeInAdventInput.value === timeOutAdventInput.value;
 
 pristine.addValidator (
   timeInAdventInput,
@@ -220,8 +203,6 @@ pristine.addValidator (
   'Поля времени заезда и отъезда должны быть равны',
 );
 
-// Global
-
 resetButton.addEventListener('click', () => {
   const ErrorMessages = mainForm.querySelectorAll('.ad-form--error');
   for (let i = 0; i <= ErrorMessages.length - 1; i++) {
@@ -231,5 +212,49 @@ resetButton.addEventListener('click', () => {
 
 mainForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  Pristine.validate();
+  const isValid = pristine.validate();
+
+  if (isValid) {
+    const formData = new FormData(evt.target);
+
+    fetch(
+      'https://25.javascript.pages.academy/keksobooking',
+      {
+        method: 'POST',
+        body: formData,
+        type: 'multipart/form-data',
+      },
+    )
+      .then(() => {
+        submitButton.setAttribute('disabled', 'disabled');
+        const successTemplate = document.querySelector('#success')
+          .content
+          .querySelector('.success');
+        const seccessMessage = successTemplate.cloneNode(true);
+        document.body.append(seccessMessage);
+        evt.target.reset();
+        document.addEventListener('click', () => eventListenerForDocumentClick('click', seccessMessage));
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            seccessMessage.remove();
+          }
+        });
+      })
+      .catch(() => {
+        const errorTemplate = document.querySelector('#error')
+          .content
+          .querySelector('.error');
+        const errorMessage = errorTemplate.cloneNode(true);
+        document.body.append(errorMessage);
+        const errorButtonClose = errorMessage.querySelector('.error__button');
+        errorButtonClose.addEventListener('click', () => eventListenerForDocumentClick('click', errorMessage));
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            errorMessage.remove();
+          }
+        });
+      });
+  }
 });
+
+export {mainForm};
