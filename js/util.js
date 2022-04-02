@@ -1,4 +1,4 @@
-const getRandomInteger = function (min, max) {
+const getRandomInteger = (min, max) => {
 
   if ((min || max) < 0 || max < min || (min || max) % 1 !== 0)  {
     return 'При выборе диапозона допущена ошибка.';
@@ -9,7 +9,7 @@ const getRandomInteger = function (min, max) {
 
 getRandomInteger(1, 50);
 
-const getRandomFloat = function (min, max, numberAfterDot) {
+const getRandomFloat = (min, max, numberAfterDot) => {
 
   if ((min || max) < 0 || max < min || (min || max) % 1 === 0)  {
     return 'При выборе диапозона допущена ошибка.';
@@ -43,8 +43,23 @@ const showAlert = (message) => {
   }, 5000);
 };
 
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+const eventListenerForDocumentClick = (event, message) => {
+  message.remove();
+  document.removeEventListener(event, eventListenerForDocumentClick);
+};
+
 export {
   getRandomInteger,
   getRandomFloat,
-  showAlert
+  showAlert,
+  debounce,
+  eventListenerForDocumentClick,
 };

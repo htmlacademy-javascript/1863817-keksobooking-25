@@ -3,7 +3,7 @@ const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
 
-const translateTypes = function (englishWord) {
+const translateTypes = (englishWord) => {
   let russianWord = '';
 
   switch (englishWord) {
@@ -27,12 +27,9 @@ const translateTypes = function (englishWord) {
   return russianWord;
 };
 
-const createPhotoList = function(linkList, templateClone) {
+const createPhotoList = (linkList, templateClone) => {
   const photoBlock = templateClone.querySelector('.popup__photos');
   const photo = photoBlock.querySelector('.popup__photo');
-  if (!linkList) {
-    photoBlock.classList.add('hidden');
-  }
 
   for (let i = 0; i <= linkList.length - 1; i++) {
     if(i === 0) {
@@ -49,7 +46,7 @@ const createPhotoList = function(linkList, templateClone) {
   }
 };
 
-const createCardForMapPopup = function (advent) {
+const createCardForMapPopup = (advent) => {
   const cardElement = cardTemplate.cloneNode(true);
   const title = cardElement.querySelector('.popup__title');
   const address = cardElement.querySelector('.popup__text--address');
@@ -61,7 +58,7 @@ const createCardForMapPopup = function (advent) {
   const description =  cardElement.querySelector('.popup__description');
   const avatar = cardElement.querySelector('.popup__avatar');
   const photos = advent.offer.photos;
-  const keysWidthInfoForHtmlElements= {title, address, price, type, checkin: time, checkout : time, rooms: capacity, guests: capacity, features, description, avatar};
+  const photoContainer = cardElement.querySelector('.popup__photos');
 
   title.textContent = advent.offer.title;
   address.textContent = advent.offer.address;
@@ -72,21 +69,24 @@ const createCardForMapPopup = function (advent) {
 
   if (advent.offer.features) {
     features.textContent = advent.offer.features.join(', ');
+  } else {
+    features.classList.add('hidden');
   }
 
   if (advent.offer.description) {
     description.textContent = advent.offer.description;
+  } else {
+    description.classList.add('hidden');
   }
+
   if (photos) {
     createPhotoList(photos, cardElement);
+  } else {
+    photoContainer.classList.add('hidden');
   }
+
   avatar.src = advent.author.avatar;
 
-  // for (const [key,val] of Object.entries(keysWidthInfoForHtmlElements)) {
-  //   if (!advent.offer[key]) {
-  //     val.classList.add('hidden');
-  //   }
-  // }
   return cardElement;
 };
 

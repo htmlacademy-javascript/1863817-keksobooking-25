@@ -4,7 +4,7 @@ const photoHomeInput = document.querySelector('#images');
 const photoHonePreview = document.querySelector('#preview-for-home');
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
-const makePhotoPreview = function (input, previewBlock) {
+const makePhotoPreview = (input, previewBlock) => {
   const inputFile = input.files[0];
   const inputFileName = inputFile.name.toLowerCase();
 

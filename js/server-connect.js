@@ -8,7 +8,7 @@ const state = {
 
 const layerForAdvents = L.layerGroup();
 
-const renderMarkersForMap = function (advents) {
+const renderMarkersForMap = (advents) => {
   layerForAdvents.clearLayers();
 
   advents
@@ -22,7 +22,6 @@ const renderMarkersForMap = function (advents) {
           icon: iconFormarkerAdvents,
         }
       );
-
       markerAdvents
         .addTo(layerForAdvents)
         .bindPopup(createCardForMapPopup(advent));
@@ -32,8 +31,8 @@ const renderMarkersForMap = function (advents) {
 };
 
 
-const getData = function (onSuccess) {
-  return fetch('https://25.javascript.pages.academy/keksobooking/data')
+const getData = (onSuccess) => {
+  fetch('https://25.javascript.pages.academy/keksobooking/data')
     .then((response) =>  response.json())
     .then((advents) => {
       onSuccess(advents);

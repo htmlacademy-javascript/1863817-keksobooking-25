@@ -1,6 +1,21 @@
-import {makePageActive, makePageNoActive} from './form.js';
+import {mainForm} from './validate-form.js';
 
-makePageNoActive();
+const mainFormElements = mainForm.children;
+const mapFilters = document.querySelector('.map__filters');
+const mapFiltersElement = mapFilters.children;
+
+const makePageActive = () => {
+  mainForm.classList.remove('ad-form--disabled');
+  mapFilters.classList.remove('ad-form--disabled');
+
+  for (const element of mainFormElements) {
+    element.removeAttribute('disabled', 'disabled');
+  }
+
+  for (const element of mapFiltersElement) {
+    element.removeAttribute('disabled', 'disabled');
+  }
+};
 
 const addressInput = document.querySelector('#address');
 
@@ -56,5 +71,6 @@ const iconFormarkerAdvents = L.icon({
 
 export {
   map,
-  iconFormarkerAdvents
+  iconFormarkerAdvents,
+  mapFilters
 };
