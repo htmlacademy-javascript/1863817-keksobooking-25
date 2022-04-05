@@ -154,27 +154,40 @@ const validateRoomNumberAndCapacity = () => {
 };
 
 const getErrorMessageForRoomNumberAndCapacity = () => {
-  if (typeError === 1) {
-    return '1 комната — «для 1 гостя»';
-  } else if (typeError === 2) {
-    return '2 комнаты — «для 2 гостей» или «для 1 гостя»';
-  } else if (typeError === 3) {
-    return '3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»';
-  } else if (typeError === 4) {
-    return '100 комнат — «не для гостей»';
+  let errorMessage = '';
+
+  switch (typeError) {
+    case 1:
+      errorMessage = '1 комната — «для 1 гостя»';
+      break;
+    case 2:
+      errorMessage = '2 комнаты — «для 2 гостей» или «для 1 гостя»';
+      break;
+    case 3:
+      errorMessage = '3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»';
+      break;
+    case 4:
+      errorMessage = '100 комнат — «не для гостей»';
+      break;
   }
+
+  return errorMessage;
 };
 
 roomNumberAdventInput.addEventListener('change', () => {
   const capacityFieldset = mainForm.querySelector('.ad-form__element--capacity');
   const lastErrorMessage = capacityFieldset.querySelector('.ad-form--error');
-  lastErrorMessage.textContent = '';
+  if (lastErrorMessage) {
+    lastErrorMessage.textContent = '';
+  }
 });
 
 capacityAdventInput.addEventListener('change', () => {
   const roomNumberFieldset = mainForm.querySelector('.ad-form__element--room-number');
   const lastErrorMessage = roomNumberFieldset.querySelector('.ad-form--error');
-  lastErrorMessage.textContent = '';
+  if (lastErrorMessage) {
+    lastErrorMessage.textContent = '';
+  }
 });
 
 pristine.addValidator (
