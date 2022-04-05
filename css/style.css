@@ -619,10 +619,7 @@ fieldset {
 
 .ad-form--error {
   color: red;
-  /* position: absolute;
-  left: 0;
-  bottom: 0;
-  white-space: nowrap; */
+  display: block;
 }
 
 .ad-form__submit {
