@@ -9,11 +9,11 @@ const makePageActive = () => {
   mapFilters.classList.remove('ad-form--disabled');
 
   for (const element of mainFormElements) {
-    element.removeAttribute('disabled', 'disabled');
+    element.removeAttribute('disabled');
   }
 
   for (const element of mapFiltersElement) {
-    element.removeAttribute('disabled', 'disabled');
+    element.removeAttribute('disabled');
   }
 };
 
