@@ -11,8 +11,10 @@ const checkboxFieldset = mapFilters.querySelector('#housing-features');
 const checkboxs = mapFilters.querySelectorAll('[type="checkbox"]');
 const filterInputsList = [housingTypeFilter, housingPriceFilter, housingRoomsFilter, housingGuestsFilter];
 let filteredList;
+const LOW_PRICE_VALUE = 10000;
+const HIGH_PRICE_VALUE = 50000;
 
-const defineСoincidenceSelectWithValueAny = (advent, data, filter) => {
+const isSelectWithValueAnyEqaulsFilterValue = (advent, data, filter) => {
   let filterValue = filter.value;
 
   if (filter.value.length === 1) {
@@ -26,13 +28,13 @@ const defineСoincidenceSelectWithValueAny = (advent, data, filter) => {
   return false;
 };
 
-const defineСoincidencePriceValueAndFilter = (advent) => {
+const isPriceValueEqaulsFilterValue = (advent) => {
   const { price } = advent.offer;
   const { value } = housingPriceFilter;
 
-  const isMiddle = value === 'middle' && price >= 10000 && price <= 50000;
-  const isLow = value === 'low' && price <= 10000;
-  const isHigh = value === 'high' && price >= 50000;
+  const isMiddle = value === 'middle' && price >= LOW_PRICE_VALUE && price <= HIGH_PRICE_VALUE;
+  const isLow = value === 'low' && price <= LOW_PRICE_VALUE;
+  const isHigh = value === 'high' && price >= HIGH_PRICE_VALUE;
   const isAny = value === 'any';
 
   if (isMiddle || isLow || isHigh || isAny) {
@@ -41,7 +43,7 @@ const defineСoincidencePriceValueAndFilter = (advent) => {
   return false;
 };
 
-const defineСoincidenceCheckboxValueAndFilter = (advent) => {
+const isCheckboxValueEqaulsFilterValue = (advent) => {
   for (let i = 0; i < checkboxs.length; i++) {
     if (checkboxs[i].checked) {
       if (advent.offer.features) {
@@ -64,11 +66,11 @@ const makeEventListenerforFilters = (InputName, cb) => {
   InputName.addEventListener('change', () => {
     if (state.advents) {
       const newAdventsList = state.advents.slice();
-      filteredList = newAdventsList.filter((advent) => defineСoincidenceSelectWithValueAny(advent, 'type', housingTypeFilter));
-      filteredList = filteredList.filter((advent) => defineСoincidencePriceValueAndFilter(advent));
-      filteredList = filteredList.filter((advent) => defineСoincidenceSelectWithValueAny(advent, 'rooms', housingRoomsFilter));
-      filteredList = filteredList.filter((advent) => defineСoincidenceSelectWithValueAny(advent, 'guests', housingGuestsFilter));
-      filteredList = filteredList.filter((advent) => defineСoincidenceCheckboxValueAndFilter(advent));
+      filteredList = newAdventsList.filter((advent) => isSelectWithValueAnyEqaulsFilterValue(advent, 'type', housingTypeFilter));
+      filteredList = filteredList.filter((advent) => isPriceValueEqaulsFilterValue(advent));
+      filteredList = filteredList.filter((advent) => isSelectWithValueAnyEqaulsFilterValue(advent, 'rooms', housingRoomsFilter));
+      filteredList = filteredList.filter((advent) => isSelectWithValueAnyEqaulsFilterValue(advent, 'guests', housingGuestsFilter));
+      filteredList = filteredList.filter((advent) => isCheckboxValueEqaulsFilterValue(advent));
     }
     cb();
   });
@@ -83,11 +85,11 @@ const addEventListenerForCheckboxs = (cb) => {
     if (evt.target.tagName === 'INPUT') {
       if (state.advents) {
         const newAdventsList = state.advents.slice();
-        filteredList = newAdventsList.filter((advent) => defineСoincidenceSelectWithValueAny(advent, 'type', housingTypeFilter));
-        filteredList = filteredList.filter((advent) => defineСoincidencePriceValueAndFilter(advent));
-        filteredList = filteredList.filter((advent) => defineСoincidenceSelectWithValueAny(advent, 'rooms', housingRoomsFilter));
-        filteredList = filteredList.filter((advent) => defineСoincidenceSelectWithValueAny(advent, 'guests', housingGuestsFilter));
-        filteredList = filteredList.filter((advent) => defineСoincidenceCheckboxValueAndFilter(advent));
+        filteredList = newAdventsList.filter((advent) => isSelectWithValueAnyEqaulsFilterValue(advent, 'type', housingTypeFilter));
+        filteredList = filteredList.filter((advent) => isPriceValueEqaulsFilterValue(advent));
+        filteredList = filteredList.filter((advent) => isSelectWithValueAnyEqaulsFilterValue(advent, 'rooms', housingRoomsFilter));
+        filteredList = filteredList.filter((advent) => isSelectWithValueAnyEqaulsFilterValue(advent, 'guests', housingGuestsFilter));
+        filteredList = filteredList.filter((advent) => isCheckboxValueEqaulsFilterValue(advent));
       }
     }
     cb();

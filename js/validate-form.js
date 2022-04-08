@@ -12,6 +12,11 @@ const resetButton = mainForm.querySelector('.ad-form__reset');
 const submitButton = mainForm.querySelector('.ad-form__submit');
 let priceInputMin = '';
 const sliderElement = document.querySelector('.ad-form__slider');
+const PRICE_INPUT_MIN_BUNGALOW = 0;
+const PRICE_INPUT_MIN_FLAT = 1000;
+const PRICE_INPUT_MIN_HOTEL = 3000;
+const PRICE_INPUT_MIN_HOUSE = 5000;
+const PRICE_INPUT_MIN_PALACE = 10000;
 
 const pristine = new Pristine(mainForm, {
   classTo: 'ad-form__element',
@@ -61,24 +66,24 @@ const checkChangeTypeSelector = () => {
 
   switch (typeSelector.value) {
     case 'flat':
-      priceInputMin =  1000;
-      priceInput.placeholder = 1000;
+      priceInputMin =  PRICE_INPUT_MIN_FLAT;
+      priceInput.placeholder = PRICE_INPUT_MIN_FLAT;
       break;
     case 'bungalow':
-      priceInputMin =  0;
-      priceInput.placeholder = 0;
+      priceInputMin =  PRICE_INPUT_MIN_BUNGALOW;
+      priceInput.placeholder = PRICE_INPUT_MIN_BUNGALOW;
       break;
     case 'house':
-      priceInputMin =  5000;
-      priceInput.placeholder = 5000;
+      priceInputMin =  PRICE_INPUT_MIN_HOUSE;
+      priceInput.placeholder = PRICE_INPUT_MIN_HOUSE;
       break;
     case 'palace':
-      priceInputMin =  10000;
-      priceInput.placeholder = 10000;
+      priceInputMin =  PRICE_INPUT_MIN_PALACE;
+      priceInput.placeholder = PRICE_INPUT_MIN_PALACE;
       break;
     case 'hotel':
-      priceInputMin =  3000;
-      priceInput.placeholder = 3000;
+      priceInputMin =  PRICE_INPUT_MIN_HOTEL;
+      priceInput.placeholder = PRICE_INPUT_MIN_HOTEL;
       break;
   }
 };
@@ -86,10 +91,7 @@ const checkChangeTypeSelector = () => {
 const validateForPrice = () => {
   checkChangeTypeSelector();
 
-  if (+priceInput.value <= 100000 && +priceInput.value >= priceInputMin) {
-    return true;
-  }
-  return false;
+  return +priceInput.value <= 100000 && +priceInput.value >= priceInputMin;
 };
 
 typeSelector.addEventListener('change', (checkChangeTypeSelector));

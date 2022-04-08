@@ -1,4 +1,3 @@
-const blockForCards = document.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
@@ -91,6 +90,5 @@ const createCardForMapPopup = (advent) => {
 };
 
 export {
-  blockForCards,
   createCardForMapPopup,
 };
